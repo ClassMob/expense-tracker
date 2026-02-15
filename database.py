@@ -22,3 +22,27 @@ def init_db():
     conn.close()
     
     print("Database initialized successfully")
+    
+    
+def add_expense(amount: float, category: str, description:str, date:str):
+    """Insert new data in the database"""
+    with sqlite3.connect(DB_NAME) as conn:
+        cursor = conn.cursor()
+        
+        sql_query = """
+        INSERT INTO expenses(amount, category, description, date) VALUES (?, ?, ?, ?)
+        """
+        
+        cursor.execute(sql_query, (amount, category, description, date))
+        conn.commit()
+        print(f"Saved: {category} - {amount}€")
+        
+
+def get_all_expenses():
+    """fetches all expenses from the database"""
+    with sqlite3.connect(DB_NAME) as conn:
+        cursor = conn.cursor();
+        cursor.execute("SELECT * FROM expenses") 
+        
+        records = cursor.fetchall()
+        return records
